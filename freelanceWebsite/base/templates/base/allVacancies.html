@@ -1,0 +1,14 @@
+{% extends "main.html" %} {% block content %} 
+{% for i in vacansy  %}
+  <div style="border: 1px solid black;" class="">
+    {{i.title}}
+    <br>
+    {{i.description}}
+    <br>
+    {{i.price}}
+    <br>
+    {{i.host}}
+
+  </div>
+{% endfor %}
+{% endblock content %}

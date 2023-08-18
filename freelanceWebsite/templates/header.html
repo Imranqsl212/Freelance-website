@@ -1,0 +1,27 @@
+{% load static %}
+<header class="header">
+    <nav>
+        <div class="logo">
+            <a href="{% url 'home' %}">JOB<span>X</span></a>
+        </div>
+        <input type="checkbox" id="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
+        <ul class="menu">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'createVacansy' %}">Create Vacansy</a></li>
+            <li><a href="{% url 'AllVacansy' %}">Watch through Vacansies</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'register' %}">Register</a></li>
+            {% endif %}
+        </ul>
+        {% if request.user.is_authenticated %}
+        <div class="user-header">
+            <img src="{% static 'images/avatar.png' %}" alt="">
+            <span>Hello {{request.user}}</span>
+        </div>
+        {% endif %}
+
+    </nav>
+</header>

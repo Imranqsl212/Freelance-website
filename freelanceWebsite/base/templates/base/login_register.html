@@ -1,0 +1,64 @@
+{% extends 'main.html' %}
+{% block content %}
+<style>
+    body{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+    }
+    .wrapper-btn{
+         display:flex;
+        align-items:center;
+        gap:20px;
+        height:30px;
+    }
+
+
+
+</style>
+
+{% if page == 'login' %}
+<div class="container">
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            <a class="singup">Log in</a>
+            <div class="inputBox1">
+                <input type="text" placeholder="Name" name="name" id="name">
+                <span class="user">Name</span>
+            </div>
+            <div class="inputBox1">
+                <input type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" name="pass" id="pass">
+                <span class="user">Password</span>
+            </div>
+            <div class="wrapper-btn">
+                <button type="submit" class="enter">Enter</button>
+                <p>Haven't login yet?<a href="{% url 'register' %}">Register</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% else %}
+<div class="container">
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            <a class="singup">Register</a>
+            {% for f in form %}
+            <div class="inputBox1">
+                {{f}}
+                <span class="user">{{f.label}}</span>
+            </div>
+            {% endfor %}
+            <div class="wrapper-btn">
+                <button type="submit" class="enter">Enter</button>
+                <p>Have an accaunt? <a href="{% url 'login' %}">Login</a></p>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
