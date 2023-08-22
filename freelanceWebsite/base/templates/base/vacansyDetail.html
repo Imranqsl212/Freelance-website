@@ -1,0 +1,164 @@
+{% extends "main.html" %} {% block content %}
+<style>
+  body {
+    background-color: #e9ebee;
+  }
+  main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  a {
+    color: #666;
+  }
+  .button2 {
+    display: inline-block;
+    transition: all 0.2s ease-in;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    color: #090909;
+    padding: 0.7em 1.7em;
+    font-size: 18px;
+    border-radius: 0.5em;
+    background: #e8e8e8;
+    border: 1px solid #e8e8e8;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+  }
+
+  .button2:active {
+    color: #666;
+    box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+  }
+
+  .button2:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.25);
+    top: 100%;
+    width: 140%;
+    height: 180%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+  }
+
+  .button2:after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.45);
+    top: 180%;
+    width: 160%;
+    height: 190%;
+    background-color: #009087;
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+  }
+
+  .button2:hover {
+    color: #ffffff;
+    border: 1px solid #009087;
+  }
+  .button2:hover:before {
+    top: -35%;
+    background-color: #009087;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+  }
+
+  .button2:hover:after {
+    top: -45%;
+    background-color: #009087;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+  }
+  .vacansyHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .centerContent {
+    margin-top: 60px;
+  }
+  .vacansy__card {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+    padding: 40px 100px;
+    border: 1px solid white;
+    background-color: white;
+    border-radius: 6px;
+  }
+  .vacansy__footer {
+    margin-top: 90px;
+  }
+</style>
+<main>
+  <section class="vacansy__card">
+    <header class="vacansyHeader">
+      <div
+        style="display: flex; align-items: center; column-gap: 17px"
+        class="leftside"
+      >
+        <img
+          style="
+            border-radius: 4px;
+            box-shadow: 0 2px 4px hsla(210, 3%, 60%, 0.45);
+            width: 15%;
+          "
+          src="https://www.weblancer.net/__next/img/userpic-male.svg"
+          alt=""
+        />
+        <div class="header__txt">
+          <p style=" font-size:20px; #333; font-weight: 700; line-height: 1">
+            hosted by {{vacansy.host}}
+          </p>
+          <p
+            style="
+              color: #aaa;
+              height: 25px;
+              overflow: hidden;
+              text-overflow: clip;
+              white-space: nowrap;
+            "
+          >
+            created {{vacansy.created|timesince}} ago
+          </p>
+        </div>
+      </div>
+      <div class="rightside">
+        <a href="{% url 'applyVacansy' vacansy.id %}">
+          <button class="button2">Apply</button>
+        </a>
+      </div>
+    </header>
+    <div class="centerContent">
+      <h2>{{vacansy.title}}</h2>
+      <br>
+      <p>{{vacansy.description}}</p>
+    </div>
+    <footer class="vacansy__footer">
+      <ul style="list-style: disc !important; display: flex; column-gap: 29px">
+        <li style="color: #d40c0c">{{vacansy.price}} som</li>
+        {% if vacansy.isDone == False %}
+        <li style="color: #d40c0c">Не выполнено</li>
+        {% endif %} {% if vacansy.selected_freelancer %}
+        <li style="color: #00cc00">
+          Фрилансер выбран: {{ vacansy.selected_freelancer.username }}
+        </li>
+        {% else %}
+        <li style="color: #d40c0c">Фрилансер не выбран</li>
+        {% endif %}
+      </ul>
+    </footer>
+  </section>
+</main>
+{% endblock content %}

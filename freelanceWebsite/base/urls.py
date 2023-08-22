@@ -7,5 +7,8 @@ urlpatterns = [
     path('register/', views.registerPage, name='register'),
     path('login/', views.loginPage, name='login'),
     path('createVacansy/',views.createVacansy,name='createVacansy'),
-    path('allVacansy/',views.vacancies,name='AllVacansy')
+    path('allVacansy/',views.vacancies,name='AllVacansy'),
+    path('allVacansy/<int:pk>/apply/',views.applyVacansy,name='applyVacansy'),
+    path('allVacansy/<int:pk>/',views.vacansyDetail,name='vacancyDetail')
+    
 ]
