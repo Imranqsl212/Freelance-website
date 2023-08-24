@@ -8,9 +8,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import *
 from .models import *
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializer import *
 
-
-# Create your views here.
 
 
 def home(request):
@@ -20,6 +21,7 @@ def home(request):
 @login_required(login_url="register")
 def vacancies(request):
     vacansy = Vacansy.objects.all()
+    participants_count = 0
     for j in vacansy:
         participants_count = j.participants.all().count()
     context = {"vacansy": vacansy, "participants_count": participants_count}
@@ -60,6 +62,7 @@ def loginPage(request):
     return render(request, "base/login_register.html", context)
 
 
+@login_required(login_url="register")
 def logoutPage(request):
     logout(request)
     return redirect("home")
@@ -78,12 +81,33 @@ def createVacansy(request):
     return render(request, "base/createVacansy.html", context)
 
 
-# @login_required(login_url='register')
-# def updateVacansy(request):
+@login_required(login_url="register")
+def updateVacansy(request, pk):
+    vacansy = Vacansy.objects.get(id=pk)
+    if request.user != vacansy.host:
+        return HttpResponse("You arent owner of a room")
+    if request.method == "POST":
+        vacansy.title = request.POST.get("title")
+        vacansy.description = request.POST.get("description")
+        vacansy.price = request.POST.get("price")
+        vacansy.host = request.user
+        vacansy.save()
+        return redirect("home")
+    context = {}
+    return render(request, "base/createVacansy.html", context)
 
 
-# @login_required(login_url='register')
-# def deleteVacansy(request):
+@login_required(login_url="register")
+def deleteVacansy(request, pk):
+    vacansy = Vacansy.objects.get(id=pk)
+    if request.user != vacansy.host:
+        return HttpResponse("You arent owner of a room")
+    if request.method == "POST":
+        vacansy.delete()
+        return redirect("home")
+    return HttpResponse(
+        '<h1>You deleted vacansy</h1> <a href="{% url "home" %}">Go back</a>'
+    )
 
 
 # @login_required(login_url='register')
@@ -91,9 +115,9 @@ def createVacansy(request):
 
 
 @login_required(login_url="register")
-def vacansyDetail(request,pk):
+def vacansyDetail(request, pk):
     vacansy = Vacansy.objects.get(id=pk)
-    return render(request,'base/vacansyDetail.html',{'vacansy':vacansy})
+    return render(request, "base/vacansyDetail.html", {"vacansy": vacansy})
 
 
 @login_required(login_url="register")
@@ -104,5 +128,6 @@ def applyVacansy(request, pk):
         form = ApplyForm(request.POST, instance=vacansy)
         if form.is_valid():
             form.save()
-            return redirect('vacancyDetail', pk)
-    return render(request, 'base/apply_form.html', {'form': form})
+            vacansy.participants.add(request.user)
+            return redirect("vacancyDetail", pk)
+    return render(request, "base/apply_form.html", {"form": form})
