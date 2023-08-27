@@ -7,23 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Main</title>
   <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
-  <style>
-    .chatbot-container {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      margin: 20px;
-      width: 30%;
-      height: 400px;
-      border: 1px solid #ccc;
-    }
 
-    .chatbot-iframe {
-      border: 0;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
 </head>
 <body>
   {% include 'header.html' %}
@@ -35,14 +19,5 @@
     </ul>
   {% endif %}
   {% block content %} {% endblock content %}
-  {% include 'footer.html' %}
-
-  <div class="chatbot-container">
-    <iframe
-      src="https://widget.getcody.ai/99f757e0-04fd-4ade-82e9-87d3a7692e8c"
-      class="chatbot-iframe"
-      allowfullscreen
-    ></iframe>
-  </div>
 </body>
 </html>

@@ -23,10 +23,9 @@ class Vacansy(models.Model):
 
     def __str__(self):
         if len(self.description) >= 40:
-            return self.body[0:41] + ' ...'
+            return self.body[0:41] + " ..."
         else:
             return self.description
-        
 
 
 class Comments(models.Model):
@@ -40,3 +39,16 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.body
+
+
+class Apply(models.Model):
+    description = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    name = models.ForeignKey(User, on_delete=models.CASCADE)
+    vacansy = models.ForeignKey(Vacansy, on_delete=models.CASCADE,default=None, null=False) 
+
+    class Meta:
+        ordering = ["-created"]
+        
+    def __str__(self):
+        return self.description

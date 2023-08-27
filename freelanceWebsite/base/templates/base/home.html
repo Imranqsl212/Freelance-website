@@ -1,18 +1,32 @@
-{% extends 'main.html' %}
-{% block content %}
+{% extends 'main.html' %} {% block content %} {% load static %}
 <style>
+  .chatbot-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    width: 30%;
+    height: 400px;
+    border: 1px solid #ccc;
+  }
+
+  .chatbot-iframe {
+    border: 0;
+    width: 100%;
+    height: 100%;
+  }
   body {
     font-family: "Rubik", sans-serif;
     line-height: 1;
     color: #555; /* This is our main text color*/
     font-weight: 400;
   }
-  
+
   .section-hero {
     background-color: #fdf2e9;
     padding: 8.4rem 0 9.6rem 0;
   }
-  
+
   .hero {
     /* We'll not use px to define the length and will use rem. */
     /* max-width: 1300px; */
@@ -24,7 +38,7 @@
     align-items: center;
     gap: 0 9.6rem;
   }
-  
+
   .heading-primary {
     font-size: 5.2rem;
     color: #333;
@@ -33,22 +47,22 @@
     line-height: 1.05;
     margin-bottom: 3.6rem;
   }
-  
+
   .hero-description {
     font-size: 2rem;
     line-height: 1.5;
     margin-bottom: 4.8rem;
   }
-  
+
   .hero-img-box {
     grid-column: 2/3;
     grid-row: 1 / 3;
   }
-  
+
   .hero-img {
     width: 100%;
   }
-  
+
   .btn:link,
   .btn:visited {
     display: inline-block;
@@ -61,28 +75,28 @@
     /* margin-top: 4.8rem; */
     padding: 1.6rem 3.2rem;
     text-decoration: none;
-  
+
     transition: background-color 500ms;
   }
-  
+
   .btn--fill:link,
   .btn--fill:visited {
     background-color: #e67e22;
     color: #fff;
   }
-  
+
   .btn--outline:link,
   .btn--outline:visited {
     color: #555;
     background-color: #fff;
   }
-  
+
   .btn--fill:hover,
   .btn--fill:active {
     background-color: #cf711f;
     text-decoration: underline;
   }
-  
+
   .btn--outline:hover,
   .btn--outline:active {
     background-color: #fdf2e9;
@@ -91,18 +105,18 @@
     text-decoration: underline;
     /* outline: #fff solid 3px; */
   }
-  
+
   /* We'll create a utility class that can be used for any element by simply adding a class. */
   .margin-right-btn {
     margin-right: 2.4rem;
   }
-  
+
   .delivered-meals {
     display: flex;
     align-items: center;
     gap: 3.2rem;
   }
-  
+
   .delivered-imgs img {
     width: 4.8rem;
     height: 4.8rem;
@@ -110,18 +124,23 @@
     margin-right: -1.6rem;
     outline: #fdf2e9 solid 3px;
   }
-  
+
   .delivered-text {
     font-size: 1.8rem;
     font-weight: 600;
   }
-  
+
   .delivered-text span {
     color: #cf711f;
   }
+  .chatbot-container.expanded {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border: none;
+  }
 </style>
 <section class="section-hero">
-
   <div class="hero">
     <div class="hero-text-box">
       <h1 class="heading-primary">
@@ -129,8 +148,7 @@
       </h1>
       <p class="hero-description">
         The smart 365-days-per-year food subscription that will make you eat
-        healthy again. Tailored to your personal tastes and nutritional
-        needs.
+        healthy again. Tailored to your personal tastes and nutritional needs.
       </p>
       <a href="{% url 'AllVacansy' %}" class="btn btn--fill margin-right-btn"
         >Start eating well
@@ -141,23 +159,143 @@
         src="https://dt2sdf0db8zob.cloudfront.net/wp-content/uploads/2022/12/7-Best-Websites-to-Hire-Freelancers-in-the-UK.png"
         alt="Woman enjoying food, meals in storage container, and food bowls on a table"
         class="hero-img"
-        style="border-radius: 12px;"
+        style="border-radius: 12px"
       />
     </div>
-    <br><br><br>
+    <br /><br /><br />
     <div class="delivered-meals">
       <div class="delivered-imgs">
-        <img src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-1.jpg" alt="Customer photo" />
-        <img src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-2.jpg" alt="Customer photo" />
-        <img src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-3.jpg" alt="Customer photo" />
-        <img src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-4.jpg" alt="Customer photo" />
-        <img src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-5.jpg" alt="Customer photo" />
-        <img src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-6.jpg" alt="Customer photo" />
+        <img
+          src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-1.jpg"
+          alt="Customer photo"
+        />
+        <img
+          src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-2.jpg"
+          alt="Customer photo"
+        />
+        <img
+          src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-3.jpg"
+          alt="Customer photo"
+        />
+        <img
+          src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-4.jpg"
+          alt="Customer photo"
+        />
+        <img
+          src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-5.jpg"
+          alt="Customer photo"
+        />
+        <img
+          src="https://prayagtandon.github.io/Omnifood-Project/Hero-section/img/customers/customer-6.jpg"
+          alt="Customer photo"
+        />
       </div>
-      <p class="delivered-text">
-        <span>250,000+</span> customers are happy!
-      </p>
+      <p class="delivered-text"><span>250,000+</span> customers are happy!</p>
     </div>
   </div>
 </section>
+<br /><br /><br /><br />
+<div class="context textcenter">
+  <h3 class="textgreen">What we do</h3>
+
+  <h2>HELPING EACH OTHER TO EARN MONEY</h2>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit<br />
+    Lorem ipsum dolor sit amet, consectetur
+  </p>
+</div>
+<br /><br /><br /><br /><br />
+<div class="container2">
+  <div class="fern">
+    <img
+      style="width: 100%; height: 700px"
+      src="{% static 'images/ss.png' %}"
+      alt=""
+    />
+  </div>
+
+  <div class="context2">
+    <div class="ferncontext">
+      <h3 class="textgreen">About Us</h3>
+      <h3 class="lightertext">
+        we cannot afford to fail in our mission to save a living planet
+      </h3>
+      <p>
+        delectus reiciendis maiores alias consequatur aut.maiores alias Lorem
+        ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod
+        delectus reiciendis maiores alias consequatur aut.maiores alias Lorem
+        ipsum dolor sit amet, consectetur
+      </p>
+    </div>
+    <div class="progressbars">
+      <div class="progress-status">
+        <div class="ninty">
+          <div class="progress blue">
+            <div class="progress-left">
+              <div class="progress-value">90%</div>
+            </div>
+            <div class="progress-right"></div>
+          </div>
+          <h4>Happy freelancers</h4>
+        </div>
+      </div>
+
+      <div class="progress-status-green">
+        <div class="eighty">
+          <div class="progress-green">
+            <div class="progress-left-green">
+              <div class="progress-value-green">80%</div>
+            </div>
+            <div class="progress-right-green"></div>
+          </div>
+          <h4>Happy customers</h4>
+        </div>
+      </div>
+
+      <div class="progress-status-golden">
+        <div class="seventyfive">
+          <div class="progress-golden">
+            <div class="progress-left-golden">
+              <div class="progress-value golden">75%</div>
+            </div>
+            <div class="progress-right-golden"></div>
+          </div>
+          <h4>Done Vacancies</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chatbot-container">
+  <iframe
+    src="https://widget.getcody.ai/99f757e0-04fd-4ade-82e9-87d3a7692e8c"
+    class="chatbot-iframe"
+    allowfullscreen
+  ></iframe>
+</div>
+<script>
+  const chatbotContainer = document.querySelector(".chatbot-container");
+  const chatbotIframe = document.querySelector(".chatbot-iframe");
+
+  let isExpanded = false;
+
+  window.addEventListener("scroll", () => {
+    const scrollPosition = window.scrollY || window.pageYOffset;
+
+    if (
+      !isExpanded &&
+      scrollPosition + window.innerHeight >= document.body.scrollHeight
+    ) {
+      chatbotContainer.classList.add("expanded");
+      isExpanded = true;
+    } else if (
+      isExpanded &&
+      scrollPosition < document.body.scrollHeight - window.innerHeight
+    ) {
+      chatbotContainer.classList.remove("expanded");
+      isExpanded = false;
+    }
+  });
+</script>
 {% endblock content %}

@@ -9,6 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
   }
   a {
     color: #666;
@@ -134,15 +135,19 @@
           </p>
         </div>
       </div>
+      {% if request.user == vacansy.host %}
+        <a href="#">Choose freelancer</a>
+      {% else %}
       <div class="rightside">
         <a href="{% url 'applyVacansy' vacansy.id %}">
           <button class="button2">Apply</button>
         </a>
       </div>
+      {% endif %}
     </header>
     <div class="centerContent">
       <h2>{{vacansy.title}}</h2>
-      <br>
+      <br />
       <p>{{vacansy.description}}</p>
     </div>
     <footer class="vacansy__footer">
@@ -159,6 +164,60 @@
         {% endif %}
       </ul>
     </footer>
+  </section>
+  <section
+    style="
+      margin-top: 45px;
+      width: 80%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      margin-top: 70px;
+      padding: 40px 100px;
+      border: 1px solid white;
+      background-color: white;
+      border-radius: 6px;
+    "
+    class="members"
+  >
+    {% for m in members %}
+    <header class="vacansyHeader">
+      <div
+        style="display: flex; align-items: center; column-gap: 17px"
+        class="leftside"
+      >
+        <img
+          style="
+            border-radius: 4px;
+            box-shadow: 0 2px 4px hsla(210, 3%, 60%, 0.45);
+            width: 15%;
+          "
+          src="https://www.weblancer.net/__next/img/userpic-male.svg"
+          alt=""
+        />
+        <div class="header__txt">
+          <p style=" font-size:20px; #333; font-weight: 700; line-height: 1">
+            {{m.username}}
+          </p>
+          {% for d in datas %}
+          <p
+            style="
+              color: #aaa;
+              height: 25px;
+              overflow: hidden;
+              text-overflow: clip;
+              white-space: nowrap;
+            "
+          >
+            created {{d.created|timesince}} ago
+          </p>
+          <p>{{d.description}}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </header>
+    <hr style="margin-bottom: 40px" />
+    {% endfor %}
   </section>
 </main>
 {% endblock content %}

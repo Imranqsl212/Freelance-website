@@ -13,7 +13,6 @@ from rest_framework.response import Response
 from .serializer import *
 
 
-
 def home(request):
     return render(request, "base/home.html", {})
 
@@ -21,10 +20,7 @@ def home(request):
 @login_required(login_url="register")
 def vacancies(request):
     vacansy = Vacansy.objects.all()
-    participants_count = 0
-    for j in vacansy:
-        participants_count = j.participants.all().count()
-    context = {"vacansy": vacansy, "participants_count": participants_count}
+    context = {"vacansy": vacansy}
     return render(request, "base/allVacancies.html", context)
 
 
@@ -117,17 +113,25 @@ def deleteVacansy(request, pk):
 @login_required(login_url="register")
 def vacansyDetail(request, pk):
     vacansy = Vacansy.objects.get(id=pk)
-    return render(request, "base/vacansyDetail.html", {"vacansy": vacansy})
+    members = vacansy.participants.all()
+    datas = Apply.objects.filter(vacansy=vacansy)
+    return render(
+        request, "base/vacansyDetail.html", {"vacansy": vacansy, "members": members,'datas':datas}
+    )
 
 
 @login_required(login_url="register")
 def applyVacansy(request, pk):
     vacansy = Vacansy.objects.get(id=pk)
-    form = ApplyForm(instance=vacansy)
     if request.method == "POST":
-        form = ApplyForm(request.POST, instance=vacansy)
-        if form.is_valid():
-            form.save()
-            vacansy.participants.add(request.user)
-            return redirect("vacancyDetail", pk)
-    return render(request, "base/apply_form.html", {"form": form})
+        Apply.objects.create(
+            description=request.POST.get("description"),
+            name=request.user,
+            vacansy=vacansy,
+        )
+        vacansy.participants.add(request.user)
+    return render(request,'base/apply_form.html',{})
+
+
+
+

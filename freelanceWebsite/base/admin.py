@@ -5,3 +5,4 @@ from .models import *
 
 admin.site.register(Vacansy)
 admin.site.register(Comments)
+admin.site.register(Apply)

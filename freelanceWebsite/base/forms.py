@@ -9,7 +9,7 @@ class userForm(ModelForm):
         fields = ["username", "email"]
 
 
-class ApplyForm(ModelForm):
+class SelectManForm(ModelForm):
     class Meta:
         model = Vacansy
         fields = ["selected_freelancer"]
