@@ -10,6 +10,7 @@
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'createVacansy' %}">Create Vacansy</a></li>
             <li><a href="{% url 'AllVacansy' %}">Watch through Vacansies</a></li>
+            <li><a href="{% url 'forum' %}">FAQ</a></li>
             {% if request.user.is_authenticated %}
             <li><a href="{% url 'logout' %}">Logout</a></li>
             {% else %}

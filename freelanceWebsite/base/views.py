@@ -116,7 +116,9 @@ def vacansyDetail(request, pk):
     members = vacansy.participants.all()
     datas = Apply.objects.filter(vacansy=vacansy)
     return render(
-        request, "base/vacansyDetail.html", {"vacansy": vacansy, "members": members,'datas':datas}
+        request,
+        "base/vacansyDetail.html",
+        {"vacansy": vacansy, "members": members, "datas": datas},
     )
 
 
@@ -128,10 +130,50 @@ def applyVacansy(request, pk):
             description=request.POST.get("description"),
             name=request.user,
             vacansy=vacansy,
+            phone = request.POST.get('phone'),
+            telegram = request.POST.get('telegram')
         )
         vacansy.participants.add(request.user)
-    return render(request,'base/apply_form.html',{})
+        return redirect("vacancyDetail", pk)
+    return render(request, "base/apply_form.html", {})
 
 
+@login_required(login_url="register")
+def FAQ(request):
+    if request.method == "POST":
+        message = Comments.objects.create(
+            user=request.user, body=request.POST.get("send")
+        )
+    messages = Comments.objects.all()
+    context = {"messages1": messages}
+    return render(request, "base/forum.html", context)
 
 
+@login_required(login_url="register")
+def deleteMessage(request, pk):
+    message = Comments.objects.get(id=pk)
+    if request.user != message.user:
+        return HttpResponse("You arent owner of a room")
+    if request.method == "POST":
+        message.delete()
+        return redirect("forum")
+    return HttpResponse(
+        '<h1>You deleted message</h1> <a href="{% url "home" %}">Go back</a>'
+    )
+    
+    
+    
+@login_required(login_url="register")
+def choose_freelancer(request, vacancy_id):
+    if request.method == "POST":
+        vacancy = Vacansy.objects.get(id=vacancy_id, host=request.user)
+        selected_applicant_id = request.POST.get("freelancer_select")
+        
+        if selected_applicant_id:
+            selected_applicant = Apply.objects.get(id=selected_applicant_id, vacansy=vacancy)
+            
+            if vacancy.selected_freelancer != selected_applicant.name:
+                vacancy.selected_freelancer = selected_applicant.name
+                vacancy.save()
+            
+    return redirect("vacancyDetail", pk=vacancy_id)

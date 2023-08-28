@@ -135,9 +135,19 @@
           </p>
         </div>
       </div>
-      {% if request.user == vacansy.host %}
-        <a href="#">Choose freelancer</a>
-      {% else %}
+      {% if request.user == vacansy.host and not vacansy.selected_freelancer %}
+      <form method="post" action="{% url 'choose_freelancer' vacansy.id %}">
+        {% csrf_token %}
+        <label for="freelancer_select">Select Freelancer:</label>
+        <select name="freelancer_select" id="freelancer_select">
+          <option value="" selected disabled>Select an applicant</option>
+          {% for data in datas %}
+          <option value="{{ data.id }}">{{ data.name }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Choose Freelancer</button>
+      </form>
+      {% elif request.user != vacansy.host %}
       <div class="rightside">
         <a href="{% url 'applyVacansy' vacansy.id %}">
           <button class="button2">Apply</button>
@@ -152,12 +162,17 @@
     </div>
     <footer class="vacansy__footer">
       <ul style="list-style: disc !important; display: flex; column-gap: 29px">
-        <li style="color: #d40c0c">{{vacansy.price}} som</li>
+        <li style="color: #00cc00">{{vacansy.price}} som</li>
         {% if vacansy.isDone == False %}
         <li style="color: #d40c0c">Не выполнено</li>
         {% endif %} {% if vacansy.selected_freelancer %}
         <li style="color: #00cc00">
-          Фрилансер выбран: {{ vacansy.selected_freelancer.username }}
+          Фрилансер выбран: {{ vacansy.selected_freelancer.username }} <br />
+          {% if request.user == vacansy.host %} {% for j in datas %}
+          <p>Phone number: {{j.phone}}</p>
+          <br />
+          <p>Telegram: {{j.telegram}}</p>
+          {% endfor %} {% endif %}
         </li>
         {% else %}
         <li style="color: #d40c0c">Фрилансер не выбран</li>

@@ -187,8 +187,12 @@
           <a class="chip">{{i.price}} som</a>
           <span class="author">Hosted by {{i.host}}</span>
         </div>
-        {% if request.user == i.host %}
-        <div style="display: flex; align-items: center; column-gap: 12px;" class="left">
+
+        <div
+          style="display: flex; align-items: center; column-gap: 12px"
+          class="left"
+        >
+          {% if request.user == i.host %}
           <form action="{% url 'delete' i.id %}" method="POST">
             {% csrf_token %}
             <button
@@ -198,10 +202,15 @@
               <a class="chip" style="background-color: red">Delete</a>
             </button>
           </form>
-          <a class="chip" href="{% url 'update' i.id %}" style="background-color: red">Update</a>
+          
+          <a
+            class="chip"
+            href="{% url 'update' i.id %}"
+            style="background-color: red"
+            >Update</a
+          >
+          {% endif %}
         </div>
-
-        {% endif %}
       </div>
     </article>
   </li>

@@ -1,0 +1,147 @@
+{% extends "main.html" %} {% block content %}
+<style>
+  /* Universal Reset */
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  *:hover,
+  *:focus {
+    outline: none;
+  }
+
+  /* Styling for the Chat Container */
+  .chat {
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
+    min-height: 100%;
+    padding: 15px 30px;
+    margin: 0 auto;
+    overflow-y: scroll;
+    background-color: #fff;
+    direction: rtl;
+    margin-bottom: 130px;
+  }
+
+  .chat__wrapper {
+    display: flex;
+    margin-bottom: 30px;
+    flex-direction: column;
+  }
+
+  .chat__message {
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: #000;
+    background-color: #e6e7ec;
+    max-width: 600px;
+    width: fit-content;
+    position: relative;
+    word-break: break-all;
+    direction: ltr;
+  }
+
+  .chat__message:after {
+    content: "";
+    width: 20px;
+    height: 12px;
+    display: block;
+    background-image: url("https://stageviewcincyshakes.firebaseapp.com/icon-gray-message.e6296433d6a72d473ed4.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    position: absolute;
+    bottom: -2px;
+    left: -5px;
+  }
+
+  /* Styling for the Chat Form */
+  .chat__form {
+    background-color: #e0e0e0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .chat__form form {
+    max-width: 800px;
+    margin: 0 auto;
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+
+  .chat__form input {
+    height: 40px;
+    font-size: 16px;
+    min-width: 90%;
+    padding-left: 15px;
+    background-color: #fff;
+    border-radius: 15px;
+    border: none;
+  }
+
+  .chat__form button {
+    width: 10%;
+    height: 100%;
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .chat__form button:hover {
+    font-weight: bold;
+  }
+</style>
+<div class="chat">
+  {% for message in messages1 %}
+  <div class="chat__wrapper">
+    <p style="margin-top: 35px">{{message.user.username}}</p>
+    <div class="chat__message">
+      <div class="date">{{ message.created|timesince }} ago</div>
+      <hr />
+      <div>{{ message.body }}</div>
+    </div>
+    <form action="{% url 'deleteMess' message.id %}" method="POST">
+      {% csrf_token %} {% if request.user == message.user %}
+      <button type="submit">
+        <a>
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+          >
+            <title>remove</title>
+            <path
+              d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z"
+            ></path>
+          </svg>
+        </a>
+      </button>
+      {% endif %}
+    </form>
+  </div>
+  {% endfor %}
+</div>
+<div class="chat__form">
+  <form method="POST" id="chat__form">
+    {% csrf_token %}
+    <input
+      id="send"
+      name="send"
+      type="text"
+      placeholder="Type your message here ..."
+    />
+    <button type="submit">Send</button>
+  </form>
+</div>
+{% endblock content %}

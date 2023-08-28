@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 
 class Vacansy(models.Model):
@@ -30,7 +31,6 @@ class Vacansy(models.Model):
 
 class Comments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Vacansy, on_delete=models.CASCADE)
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
@@ -45,10 +45,19 @@ class Apply(models.Model):
     description = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
     name = models.ForeignKey(User, on_delete=models.CASCADE)
-    vacansy = models.ForeignKey(Vacansy, on_delete=models.CASCADE,default=None, null=False) 
+    vacansy = models.ForeignKey(
+        Vacansy, on_delete=models.CASCADE, default=None, null=False
+    )
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{9,15}$',
+        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+    )
+    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True)
+    telegram = models.CharField(max_length=100,default='')
+    
 
     class Meta:
         ordering = ["-created"]
-        
+
     def __str__(self):
         return self.description
