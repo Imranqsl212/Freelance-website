@@ -153,6 +153,8 @@
           <button class="button2">Apply</button>
         </a>
       </div>
+      {% elif request.user == vacansy.host %}
+      <button>done</button>
       {% endif %}
     </header>
     <div class="centerContent">
@@ -214,7 +216,7 @@
           <p style=" font-size:20px; #333; font-weight: 700; line-height: 1">
             {{m.username}}
           </p>
-          {% for d in datas %}
+          {% for d in m.apply_set.all %}
           <p
             style="
               color: #aaa;
@@ -227,6 +229,10 @@
             created {{d.created|timesince}} ago
           </p>
           <p>{{d.description}}</p>
+          {% if request.user == vacansy.host %}
+            <p>{{d.phone}}</p>
+            <p>{{d.telegram}}</p>
+          {% endif %}
           {% endfor %}
         </div>
       </div>

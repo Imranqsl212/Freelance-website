@@ -130,8 +130,8 @@ def applyVacansy(request, pk):
             description=request.POST.get("description"),
             name=request.user,
             vacansy=vacansy,
-            phone = request.POST.get('phone'),
-            telegram = request.POST.get('telegram')
+            phone=request.POST.get("phone"),
+            telegram=request.POST.get("telegram"),
         )
         vacansy.participants.add(request.user)
         return redirect("vacancyDetail", pk)
@@ -160,20 +160,29 @@ def deleteMessage(request, pk):
     return HttpResponse(
         '<h1>You deleted message</h1> <a href="{% url "home" %}">Go back</a>'
     )
-    
-    
-    
+
+
 @login_required(login_url="register")
 def choose_freelancer(request, vacancy_id):
     if request.method == "POST":
         vacancy = Vacansy.objects.get(id=vacancy_id, host=request.user)
         selected_applicant_id = request.POST.get("freelancer_select")
-        
+
         if selected_applicant_id:
-            selected_applicant = Apply.objects.get(id=selected_applicant_id, vacansy=vacancy)
-            
+            selected_applicant = Apply.objects.get(
+                id=selected_applicant_id, vacansy=vacancy
+            )
+
             if vacancy.selected_freelancer != selected_applicant.name:
                 vacancy.selected_freelancer = selected_applicant.name
                 vacancy.save()
-            
+
     return redirect("vacancyDetail", pk=vacancy_id)
+
+
+@login_required(login_url="register")
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    vacanciesCreatedBy = user.vacansy_set.all()
+    context = {"user": user, "vacancies": vacanciesCreatedBy}
+    return render(request, "base/userprofile.html", context)
