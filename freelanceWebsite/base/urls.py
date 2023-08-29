@@ -19,4 +19,5 @@ urlpatterns = [
         views.choose_freelancer,
         name="choose_freelancer",
     ),
+    path('done/<int:pk>/',views.doneVacansy,name='done')
 ]

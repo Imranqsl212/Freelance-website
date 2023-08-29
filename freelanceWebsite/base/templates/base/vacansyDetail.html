@@ -154,7 +154,12 @@
         </a>
       </div>
       {% elif request.user == vacansy.host %}
-      <button>done</button>
+      <form action="{% url 'done' vacansy.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">
+          Done vacancy
+        </button>
+      </form>
       {% endif %}
     </header>
     <div class="centerContent">
@@ -167,6 +172,8 @@
         <li style="color: #00cc00">{{vacansy.price}} som</li>
         {% if vacansy.isDone == False %}
         <li style="color: #d40c0c">Не выполнено</li>
+        {% else %}
+        <li style="color: #00cc00">Выполнено</li>
         {% endif %} {% if vacansy.selected_freelancer %}
         <li style="color: #00cc00">
           Фрилансер выбран: {{ vacansy.selected_freelancer.username }} <br />

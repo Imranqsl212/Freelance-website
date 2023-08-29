@@ -106,8 +106,14 @@ def deleteVacansy(request, pk):
     )
 
 
-# @login_required(login_url='register')
-# def doneVacansy(request):
+@login_required(login_url='register')
+def doneVacansy(request,pk):
+    vacansy = Vacansy.objects.get(id=pk)
+    if request.method == 'POST':
+        vacansy.isDone = True
+        vacansy.save()
+        return redirect('AllVacansy')
+        
 
 
 @login_required(login_url="register")
