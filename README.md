@@ -22,5 +22,4 @@ This is a freelance website built with Django, HTML, and CSS, designed to connec
 - **Contractor Selection:**
   - Clients can choose a contractor for their projects
 
-## Setup Instructions
 
